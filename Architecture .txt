@@ -1,0 +1,221 @@
+text
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           HR AGENT SYSTEM ARCHITECTURE                      │
+└─────────────────────────────────────────────────────────────────────────────┘
+1. High-Level Architecture Flow
+text
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│   CLIENT        │    │   API GATEWAY    │    │   AGENT         │
+│   LAYER         │────│   LAYER          │────│   ORCHESTRATOR  │
+│                 │    │                  │    │                 │
+└─────────────────┘    └──────────────────┘    └─────────────────┘
+         │                       │                       │
+         ▼                       ▼                       ▼
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│   FRONTEND      │    │   AUTHENTICATION │    │   WORKFLOW      │
+│   DASHBOARD     │    │   & AUTHORIZATION│    │   ENGINE        │
+└─────────────────┘    └──────────────────┘    └─────────────────┘
+2. Core Agent Architecture
+text
+                               ┌─────────────────────────────────┐
+                               │       MASTER COORDINATOR       │
+                               │           AGENT                │
+                               └─────────────────────────────────┘
+                                            │
+                    ┌───────────────────────┼───────────────────────┐
+                    │                       │                       │
+                    ▼                       ▼                       ▼
+    ┌─────────────────────────┐ ┌─────────────────────────┐ ┌─────────────────────────┐
+    │   RECRUITMENT AGENT     │ │ EMPLOYEE MANAGEMENT     │ │    ANALYTICS AGENT      │
+    │                         │ │        AGENT            │ │                         │
+    │ • Resume Screening      │ │ • Onboarding Automation │ │ • Predictive Modeling   │
+    │ • Candidate Matching    │ │ • Performance Tracking  │ │ • Metrics Analysis      │
+    │ • Interview Coordination│ │ • Leave Management      │ │ • Trend Identification  │
+    └─────────────────────────┘ └─────────────────────────┘ └─────────────────────────┘
+                    │                       │                       │
+                    ▼                       ▼                       ▼
+    ┌─────────────────────────┐ ┌─────────────────────────┐
+    │   COMMUNICATION AGENT   │ │    COMPLIANCE AGENT     │
+    │                         │ │                         │
+    │ • Query Resolution      │ │ • Policy Enforcement    │
+    │ • Notification Management│ │ • Document Management  │
+    │ • Feedback Collection   │ │ • Audit Trail Maintenance│
+    └─────────────────────────┘ └─────────────────────────┘
+3. Data Flow Architecture
+text
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│   USER      │     │   API       │     │   AGENT     │     │ KNOWLEDGE   │
+│   INPUT     │────▶│  GATEWAY    │────▶│ ORCHESTRATOR│────▶│   BASE      │
+└─────────────┘     └─────────────┘     └─────────────┘     └─────────────┘
+                                                              │
+         ┌───────────────────────────────────────────────────┘
+         ▼
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│  DECISION   │     │  RESPONSE   │     │ FEEDBACK    │     │  LEARNING   │
+│   ENGINE    │────▶│  GENERATOR  │────▶│ COLLECTOR   │────▶│   ENGINE    │
+└─────────────┘     └─────────────┘     └─────────────┘     └─────────────┘
+                                                              │
+         ┌───────────────────────────────────────────────────┘
+         ▼
+┌─────────────┐
+│ MODEL       │
+│ UPDATES     │
+└─────────────┘
+4. Microservices Architecture
+text
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                            MICROSERVICES LAYER                              │
+├─────────────────┬─────────────────┬─────────────────┬───────────────────────┤
+│  API GATEWAY    │  AGENT          │  LEARNING       │   DATA SERVICES       │
+│  SERVICE        │  ORCHESTRATION  │  ENGINE SERVICE │                       │
+│                 │  SERVICE        │                 │                       │
+│ • Routing       │ • Task          │ • Model Training│ • Knowledge Base      │
+│ • Auth          │   Delegation    │ • A/B Testing   │ • Memory Management   │
+│ • Rate Limiting │ • Workflow      │ • Performance   │ • Analytics Service   │
+│                 │   Management    │   Optimization  │                       │
+└─────────────────┴─────────────────┴─────────────────┴───────────────────────┘
+         │                 │                 │                 │
+         └─────────────────┼─────────────────┼─────────────────┘
+                           │
+         ┌─────────────────┼─────────────────┐
+         ▼                 ▼                 ▼
+┌─────────────────┬─────────────────┬─────────────────┐
+│  SPECIALIZED    │  EVENT BUS      │   CACHING       │
+│    AGENTS       │  (KAFKA)        │   LAYER         │
+│                 │                 │                 │
+│ • Recruitment   │ • Event         │ • Redis         │
+│ • Employee Mgmt │   Processing    │ • Session       │
+│ • Analytics     │ • Message Queue │   Management    │
+│ • Communication │ • Stream        │ • Cache         │
+│ • Compliance    │   Processing    │   Warming       │
+└─────────────────┴─────────────────┴─────────────────┘
+5. Data Storage Architecture
+text
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                            DATA STORAGE LAYER                               │
+├─────────────────┬─────────────────┬─────────────────┬───────────────────────┤
+│  POSTGRESQL     │  VECTOR DB      │  ELASTICSEARCH  │   FILE STORAGE        │
+│  (RELATIONAL)   │  (SEMANTIC)     │  (SEARCH)       │                       │
+│                 │                 │                 │                       │
+│ • User Data     │ • Semantic      │ • Full-text     │ • Documents           │
+│ • Agent Config  │   Search        │   Search        │ • Resumes             │
+│ • Audit Logs    │ • Embeddings    │ • Logs          │ • Policies            │
+│ • Relationships │ • Similarity    │ • Analytics     │ • Certificates        │
+│                 │   Matching      │                 │                       │
+└─────────────────┴─────────────────┴─────────────────┴───────────────────────┘
+         │                 │                 │                 │
+         └─────────────────┼─────────────────┼─────────────────┘
+                           │
+         ┌─────────────────┼─────────────────┐
+         ▼                 ▼                 ▼
+┌─────────────────┬─────────────────┬─────────────────┐
+│  DATA           │  BACKUP &       │   SECURITY      │
+│  PIPELINE       │  RECOVERY       │   LAYER         │
+│                 │                 │                 │
+│ • ETL Processes │ • Automated     │ • Encryption    │
+│ • Data Cleaning │   Backups       │ • Access        │
+│ • Real-time     │ • Disaster      │   Controls      │
+│   Streaming     │   Recovery      │ • Audit Trails  │
+└─────────────────┴─────────────────┴─────────────────┘
+6. Learning & Improvement System
+text
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      CONTINUOUS LEARNING PIPELINE                           │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+         ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
+         │   DATA          │     │   PATTERN       │     │   MODEL         │
+         │  COLLECTION     │────▶│   ANALYSIS      │────▶│   TRAINING      │
+         │                 │     │                 │     │                 │
+         │ • Interactions  │     │ • Success vs    │     │ • Retraining    │
+         │ • User Feedback │     │   Failure       │     │ • Hyperparameter│
+         │ • Outcomes      │     │   Patterns      │     │   Tuning        │
+         └─────────────────┘     └─────────────────┘     └─────────────────┘
+                    │                       │                       │
+                    ▼                       ▼                       ▼
+         ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
+         │   A/B           │     │   VALIDATION    │     │   DEPLOYMENT    │
+         │  TESTING        │────▶│   & EVALUATION  │────▶│   & MONITORING  │
+         │                 │     │                 │     │                 │
+         │ • Strategy      │     │ • Performance   │     │ • Model         │
+         │   Comparison    │     │   Metrics       │     │   Deployment    │
+         │ • Optimization  │     │ • Quality       │     │ • Continuous    │
+         │                 │     │   Assurance     │     │   Monitoring    │
+         └─────────────────┘     └─────────────────┘     └─────────────────┘
+7. Frontend Architecture
+text
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          FRONTEND DASHBOARD                                 │
+├─────────────────┬─────────────────┬─────────────────┬───────────────────────┤
+│   NAVIGATION    │   ANALYTICS     │   TASK          │   AGENT CHAT          │
+│    HEADER       │   DASHBOARD     │   MANAGEMENT    │   INTERFACE           │
+│                 │                 │                 │                       │
+│ • System Status │ • Real-time     │ • Drag & Drop   │ • Real-time Chat      │
+│ • User Menu     │   Metrics       │   Task Boards   │ • Agent Responses     │
+│ • Notifications │ • Interactive   │ • Progress      │ • Explanation         │
+│ • Quick Actions │   Charts        │   Tracking      │   Modules             │
+└─────────────────┴─────────────────┴─────────────────┴───────────────────────┘
+         │                 │                 │                 │
+         └─────────────────┼─────────────────┼─────────────────┘
+                           │
+         ┌─────────────────┼─────────────────┐
+         ▼                 ▼                 ▼
+┌─────────────────┬─────────────────┬─────────────────┐
+│   RESPONSIVE    │   REAL-TIME     │   ACCESSIBILITY │
+│    DESIGN       │   UPDATES       │   FEATURES      │
+│                 │                 │                 │
+│ • Mobile-First  │ • WebSocket     │ • Screen Reader │
+│ • Progressive   │   Connections   │   Support       │
+│   Enhancement   │ • Live Data     │ • Keyboard      │
+│ • Cross-Browser │   Streaming     │   Navigation    │
+└─────────────────┴─────────────────┴─────────────────┘
+8. Security & Infrastructure
+text
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      SECURITY & INFRASTRUCTURE                              │
+├─────────────────┬─────────────────┬─────────────────┬───────────────────────┤
+│   AUTHENTICATION│   AUTHORIZATION │   ENCRYPTION    │   NETWORK SECURITY    │
+│                 │                 │                 │                       │
+│ • OAuth 2.0     │ • RBAC          │ • AES-256       │ • Firewall Rules      │
+│ • JWT Tokens    │ • Permission    │   (Data at Rest)│ • VPN Access          │
+│ • MFA Support   │   Management    │ • TLS 1.3       │ • DDoS Protection     │
+│ • SSO Integration│ • Policy Engine │   (In Transit) │ • WAF                 │
+└─────────────────┴─────────────────┴─────────────────┴───────────────────────┘
+         │                 │                 │                 │
+         └─────────────────┼─────────────────┼─────────────────┘
+                           │
+         ┌─────────────────┼─────────────────┐
+         ▼                 ▼                 ▼
+┌─────────────────┬─────────────────┬─────────────────┐
+│   MONITORING    │   COMPLIANCE    │   DEVOPS        │
+│    STACK        │   FRAMEWORK     │   PIPELINE      │
+│                 │                 │                 │
+│ • Prometheus    │ • GDPR/CCPA     │ • Docker        │
+│ • Grafana       │   Compliance    │   Containers    │
+│ • ELK Stack     │ • SOX Controls  │ • Kubernetes    │
+│ • Jaeger Tracing│ • HIPAA Support │ • CI/CD         │
+└─────────────────┴─────────────────┴─────────────────┘
+9. Integration Points
+text
+┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
+│   EXTERNAL      │     │   HR AGENT      │     │   INTERNAL      │
+│   SYSTEMS       │     │   SYSTEM        │     │   SERVICES      │
+│                 │     │                 │     │                 │
+│ • ATS           │────▶│ • API Gateway   │◀───▶│ • Authentication│
+│ • Payroll       │     │ • Agent         │     │ • Notification  │
+│ • CRM           │     │   Orchestrator  │     │ • Document      │
+│ • LMS           │     │ • Specialized   │     │   Management    │
+│ • ERP           │     │   Agents        │     │ • Analytics     │
+└─────────────────┘     └─────────────────┘     └─────────────────┘
+         │                       │                       │
+         ▼                       ▼                       ▼
+┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
+│   DATA          │     │   EVENT         │     │   REPORTING     │
+│   SYNCHRONIZATION│     │   PROCESSING    │     │   SYSTEMS       │
+│                 │     │                 │     │                 │
+│ • Batch Updates │     │ • Real-time     │     │ • BI Tools      │
+│ • API Webhooks  │     │   Events        │     │ • Dashboards    │
+│ • Data Mapping  │     │ • Stream        │     │ • Exports       │
+│ • Error Handling│     │   Processing    │     │ • Alerts        │
+└─────────────────┘     └─────────────────┘     └─────────────────┘
+This architecture graph provides a comprehensive visual representation of the HR Agent System, showing the relationships between components, data flow, security layers, and integration points across the entire ecosystem.

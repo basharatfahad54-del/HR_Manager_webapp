@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_DB: hr_db
+      POSTGRES_USER: hr_user
+      POSTGRES_PASSWORD: hr_pass  # Prod: .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/app/migrations:/docker-entrypoint-initdb.d  # Alembic
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: ./backend  # Dockerfile below
+    restart: always
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - ./backend:/app
+      - ./HR_Manager/.env:/app/.env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql://hr_user:hr_pass@db:5432/hr_db
+
+  n8n:
+    image: n8nio/n8n:1.65.0
+    restart: always
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=admin
+      - N8N_BASIC_AUTH_PASSWORD=hrn8npass
+      - N8N_HOST=localhost
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - WEBHOOK_URL=http://localhost:5678/
+      - GENERIC_TIMEZONE=Asia/Karachi  # PKT
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ./workflows:/workflows  # Import JSON
+    # Import: n8n UI > Workflows > Import > hr-recruitment.json
+
+  frontend:
+    image: nginx:alpine
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./frontend/dist:/usr/share/nginx/html  # npm run build
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+  n8n_data:

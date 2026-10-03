@@ -1,0 +1,209 @@
+{
+  "name": "HR Recruitment Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "hr-recruitment",
+        "options": {}
+      },
+      "id": "1a2b3c4d-5e6f-7890-abcd-ef1234567890",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "operation": "create",
+        "model": "gpt-3.5-turbo",
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are an HR AI screener. Score resume 0-10 for fit, extract skills, recommend next step. Output JSON: {\"score\": 8, \"skills\": [\"Python\"], \"recommend\": \"Interview\"}."
+            },
+            {
+              "role": "user",
+              "content": "={{ $json.resume_text || $json.body.resume }}"
+            }
+          ]
+        }
+      },
+      "id": "2b3c4d5e-6f78-9012-bcde-f23456789012",
+      "name": "OpenAI Screen",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [460, 300],
+      "credentials": {
+        "openAiApi": {
+          "id": "your-openai-cred-id",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:8000/api/v1/assessments/score",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "candidate_data",
+              "value": "={{ $json.choices[0].message.content }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3c4d5e6f-7890-1234-cdef-345678901234",
+      "name": "Backend Assessment",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ parseInt($json.score || 0) }}",
+              "operation": "larger",
+              "value2": 7
+            }
+          ]
+        }
+      },
+      "id": "4d5e6f78-9012-3456-def0-456789012345",
+      "name": "IF High Score",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "fromEmail": "hr@yourcompany.com",
+        "toEmail": "={{ $json.email }}",
+        "subject": "Interview Invite - Score: {{ $json.score }}",
+        "text": "Congrats! High match. Schedule interview.",
+        "options": {}
+      },
+      "id": "5e6f7890-1234-5678-ef01-567890123456",
+      "name": "Email Invite",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [1120, 220],
+      "credentials": {
+        "smtp": "your-smtp"
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "sheetId": {
+          "__rl": true,
+          "value": "your-google-sheet-id",
+          "mode": "id"
+        },
+        "range": "A:E",
+        "options": {
+          "valueInputMode": "USER_ENTERED"
+        }
+      },
+      "id": "6f789012-3456-7890-f012-678901234567",
+      "name": "Log to Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [1120, 380]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\"status\": \"processed\", \"score\": {{ $json.score }}}"
+      },
+      "id": "7g890123-4567-8901-g123-789012345678",
+      "name": "Respond Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1340, 300]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "OpenAI Screen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Screen": {
+      "main": [
+        [
+          {
+            "node": "Backend Assessment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Backend Assessment": {
+      "main": [
+        [
+          {
+            "node": "IF High Score",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF High Score": {
+      "main": [
+        [
+          {
+            "node": "Email Invite",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Log to Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log to Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log to Sheets": {
+      "main": [
+        [
+          {
+            "node": "Respond Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2025-12-03T20:09:00.000Z",
+  "versionId": "1"
+}

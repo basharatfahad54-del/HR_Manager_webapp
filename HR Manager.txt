@@ -1,0 +1,154 @@
+HR Agent Architecture Prompt
+System Overview
+Create an intelligent HR Agent system that automates human resources tasks, learns from interactions, and continuously improves its performance using historical data and feedback loops.
+
+Core Architecture Components
+Backend (Python)
+python
+# Agent Core Structure
+class HRAgent:
+    def __init__(self):
+        self.knowledge_base = KnowledgeBase()
+        self.learning_engine = LearningEngine()
+        self.task_processor = TaskProcessor()
+        self.decision_maker = DecisionMaker()
+        self.feedback_analyzer = FeedbackAnalyzer()
+Agent Capabilities & Tasks
+Recruitment & Hiring
+
+Resume screening and candidate matching
+
+Interview scheduling and coordination
+
+Candidate communication and follow-ups
+
+Job posting optimization
+
+Talent pipeline management
+
+Employee Management
+
+Onboarding process automation
+
+Performance evaluation tracking
+
+Leave and attendance management
+
+Employee query resolution
+
+Document management and compliance
+
+Analytics & Insights
+
+Hiring metrics and success rate analysis
+
+Employee satisfaction surveys
+
+Turnover prediction and analysis
+
+Compensation benchmarking
+
+Training needs assessment
+
+Learning & Improvement System
+
+Mistake detection from previous interactions
+
+Pattern recognition in successful vs failed outcomes
+
+Feedback integration from HR staff and employees
+
+Continuous model retraining with new data
+
+Performance metrics tracking and optimization
+
+Frontend Architecture (HTML/CSS/Tailwind)
+Dashboard Components
+
+Real-time metrics cards with gradient backgrounds
+
+Interactive candidate pipeline visualization
+
+Employee status overview with progress bars
+
+Task queue management with drag-and-drop functionality
+
+Chat interface for agent interactions
+
+UI Design Specifications
+
+xml
+<!-- Modern, professional interface using Tailwind CSS -->
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+  <nav class="bg-white shadow-lg border-b border-gray-200">
+    <!-- Navigation with glassmorphism effects -->
+  </nav>
+  
+  <main class="container mx-auto px-6 py-8">
+    <!-- Grid layout for HR modules -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Interactive cards with hover animations -->
+    </div>
+  </main>
+</div>
+Data Architecture & Learning System
+Data Storage Structure
+
+Interaction logs with timestamps and context
+
+Decision trees and outcome tracking
+
+User feedback and satisfaction scores
+
+Historical performance metrics
+
+Error patterns and correction strategies
+
+Self-Improvement Mechanism
+
+Automated A/B testing for different response strategies
+
+Reinforcement learning from successful interactions
+
+Natural language processing improvements based on user queries
+
+Predictive modeling for proactive HR recommendations
+
+Continuous model validation and retraining pipelines
+
+Technical Stack Integration
+Backend Services
+
+FastAPI for REST API endpoints
+
+SQLAlchemy for database operations
+
+Celery for background task processing
+
+Redis for caching and session management
+
+Machine learning models using scikit-learn/TensorFlow
+
+Frontend Technologies
+
+Vanilla JavaScript or React for interactivity
+
+Tailwind CSS for responsive, professional styling
+
+Chart.js for data visualizations
+
+WebSocket connections for real-time updates
+
+Progressive Web App capabilities
+
+Deployment & Monitoring
+
+Docker containerization
+
+GitHub Actions for CI/CD pipeline
+
+Monitoring dashboards for agent performance
+
+Automated backup and disaster recovery
+
+Security compliance and data protection measures
